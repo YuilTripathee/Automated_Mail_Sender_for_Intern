@@ -157,7 +157,7 @@ if __name__ == "__main__":
                               <h3>Contact Info</h3>
                               <img src="https://media.licdn.com/dms/image/C5103AQGPnRGooXJusQ/profile-displayphoto-shrink_800_800/0?e=1564617600&v=beta&t=YTb3XoDzPtnIPOgrOaqJZEYxWBTGxZ3RZF2eaaXhgVc" width="128px" alt="mypicture" style="border-radius: 10px;">
                               <ul>
-                                <li><span>Begnas Lake, Ward no. 31, Pokhara Lekhnath, Gandaki, NP 33700</span></li>
+                                <li><span>Yuil Tripathee <i>@YuilTripathee</i></span></li>
                                 <li><span>yuiltripathee79@gmail.com</span></li>
                                 <li><span>+977 (982)5158989</span></a></li>
                               </ul>
