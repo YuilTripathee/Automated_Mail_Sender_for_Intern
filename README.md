@@ -137,4 +137,4 @@ CC's:
 ## Automation
 
 Using crontab (for every 4 o'clock Sunday to Friday to execute `start.sh` via `python3`):
-> `0 16 * * 0-5 gnome-terminal --command="$HOME/Programs/MailerAuto/start.sh"`
+> `0 16 * * 0-5 gnome-terminal --command="$HOME/Programs/MailerAuto/start.sh" --title="Mail based status update tool"`
