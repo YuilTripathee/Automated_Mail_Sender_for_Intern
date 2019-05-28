@@ -73,6 +73,7 @@ if __name__ == "__main__":
     dateStr = str(dateToday.month)+ "/" + str(dateToday.day) + "/" + str(dateToday.year)
     msg['Subject'] = "Intern: Status Update: " + dateStr
 
+    print("Writing your email!")
     # run html_mail_writer.py to write HTML mail into a file (saving is done for backup purposes)
     # i.e. run other python file within the python file
     os.system('python3 html_mail_writer.py')

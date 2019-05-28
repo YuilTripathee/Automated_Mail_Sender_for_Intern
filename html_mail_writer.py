@@ -1,4 +1,5 @@
 import os
+import time
 import json
 from datetime import date
 
@@ -56,48 +57,76 @@ if __name__ == "__main__":
                                 <p>Hi,</p>
                                 <p>
     """
+    
     # Adding first part into the mail page
     mail_html_page += html_page_part1
 
     # Adding message into the mail page
-    with open('message/templates.json', 'r', encoding='utf-8') as tmp_fp:
-        template_list = json.load(tmp_fp)
-        tmp_fp.close()
+    temp_usage_prompt = input("Would you consider using a template? [y/N]\n")
+    # If you choose to use template or even write a new template
+    if temp_usage_prompt == 'y':
+      with open('message/templates.json', 'r', encoding='utf-8') as tmp_fp:
+          template_list = json.load(tmp_fp)
+          tmp_fp.close()
 
-    print("\nAvailable templates:")
-    print("====================")
+      print("\nAvailable templates:")
+      print("====================")
 
-    for c_i in range(0, len(template_list)):
-        print(str(c_i) + ": " +template_list[c_i]["label"])
+      for c_i in range(0, len(template_list)):
+          print(str(c_i) + ": " +template_list[c_i]["label"])
    
-    ans_prompt1 = input("\nWould you choose to use template or write on your own? [y/N]\n")
-    if ans_prompt1 == "y":
-        temp_id = int(input("\nEnter the template id: "))
-        temp_text = template_list[temp_id]["text"]
+      ans_prompt1 = input("\nWould you choose to use template or write on your own? [y/N]\n")
+      # if you consider using the pre-defined template
+      if ans_prompt1 == "y":
+          temp_id = int(input("\nEnter the template id: "))
+          temp_text = template_list[temp_id]["text"]
+      # If you consider writing custom message and saving it to a template
+      else:
+          print("\nFeel comfortable writing text in HTML format:")
+          print("===========================================\n")
+          contents = []
+          while True:
+              line = input()
+              if line == '':
+                break
+              contents.append(line)
+          temp_text = '<br>'.join(contents)
+          new_temp_text = temp_text
+          new_temp_label = input("\nPlease provide a label: ")
+          
+          # If you didn't provided any templates
+          if new_temp_label != '' or new_temp_text != '':
+            with open('message/templates.json', 'w', encoding='utf-8') as msg_tmp_fp:
+                template_list.append({"label" : new_temp_label, "text" : new_temp_text})
+                json.dump(template_list, msg_tmp_fp, indent=4)
+                msg_tmp_fp.close()
+      mail_html_page += temp_text
+    # If you consider not using templates
     else:
-        print("\nFeel comfortable writing text in HTML format:")
-        print("===========================================\n")
-        contents = []
-        while True:
-            line = input()
-            if line == '':
-              break
-            contents.append(line)
-        temp_text = '<br>'.join(contents)
-        new_temp_text = temp_text
-        new_temp_label = input("\nPlease provide a label: ")
-        
-        with open('message/templates.json', 'w', encoding='utf-8') as msg_tmp_fp:
-            template_list.append({"label" : new_temp_label, "text" : new_temp_text})
-            json.dump(template_list, msg_tmp_fp, indent=4)
-            msg_tmp_fp.close()
+      pass
+
+    # If you consider adding up extra text after a template (or either without using it.)
+    add_para_prompt = input("Do you need to add extra text other than tempate? [y/N]\n")
+    if add_para_prompt == 'y':
+      print("\nFeel comfortable writing text in HTML format:") # like <b> for bold, <i> for italics and so on
+      print("===============================================\n")
+      add_contents = []
+      while True:
+        line = input()
+        if line == '':
+          break
+        add_contents.append(line)
+      add_content_para = "<p>" +'<br>'.join(add_contents) + "</p>"
+      mail_html_page += add_content_para
+    # If you consider not writing additional texts...
+    else:
+      pass
     
-    mail_html_page += temp_text
     print("Template written sucessfully!")
     # For date of update
     dateToday = date.today()
-    dateStr = str(dateToday.month)+ "/" + str(dateToday.day) + "/" + str(dateToday.year) + " " + get_week_name(dateToday.weekday())
-    mail_html_page += "<p> Date: <b>" + dateStr + "</b></p>"
+    dateStr = "<b>" + str(dateToday.month)+ "/" + str(dateToday.day) + "/" + str(dateToday.year) + " " + get_week_name(dateToday.weekday()) + "</b><br>Time: <b>" + time.strftime("%I:%M %p %z") + "</b>" 
+    mail_html_page += "<p> Date: " + dateStr + "</p>"
     
     mail_html_page += "<h3> Some snapshots </h3>"
     # container for embedding images
@@ -107,7 +136,7 @@ if __name__ == "__main__":
     print("\nEmbedding image reference...")
     for img_ci in range(0, len(files)):
       image_ci = img_ci + 1
-      mail_html_page += '<p><img src="cid:image' + str(image_ci) + '" alt="Snapshot" style="width: 100%;"><br><i>' + files[img_ci] + '</i></p>'
+      mail_html_page += '<p><img src="cid:image' + str(image_ci) + '" alt="Snapshot" style="max-width: 100%;"><br><i>' + files[img_ci] + '</i></p>'
       print("<image:" + str(image_ci) + "> :"+files[img_ci])
     print("\nImage reference added sucessfully!")
     html_page_part2 = """
