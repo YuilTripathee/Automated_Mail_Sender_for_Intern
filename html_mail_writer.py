@@ -2,9 +2,30 @@ import os
 import json
 from datetime import date
 
-if __name__ == "__main__":
-    mail_html_page = """"""
+# function to take week number to return week day (starting Monday as 0)
+def get_week_name(week_number):
+    if week_number == 0:
+      week_name = "Monday"
+    elif week_number == 1:
+      week_name = "Tuesday"
+    elif week_number == 2:
+      week_name = "Wednesday"
+    elif week_number == 3:
+      week_name = "Thursday"
+    elif week_number == 4:
+      week_name = "Friday"
+    elif week_number == 5:
+      week_name = "Saturday"
+    elif week_number == 6:
+      week_name = "Sunday"
+    else:
+      week_name = "Invalid weekday() input"
+    return week_name
 
+if __name__ == "__main__":
+    # empty mail page container
+    mail_html_page = """"""
+    # initial part of mail page
     html_page_part1 = """
         <!DOCTYPE html>
         <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -35,9 +56,10 @@ if __name__ == "__main__":
                                 <p>Hi,</p>
                                 <p>
     """
-
+    # Adding first part into the mail page
     mail_html_page += html_page_part1
 
+    # Adding message into the mail page
     with open('message/templates.json', 'r', encoding='utf-8') as tmp_fp:
         template_list = json.load(tmp_fp)
         tmp_fp.close()
@@ -74,7 +96,7 @@ if __name__ == "__main__":
     print("Template written sucessfully!")
     # For date of update
     dateToday = date.today()
-    dateStr = str(dateToday.month)+ "/" + str(dateToday.day) + "/" + str(dateToday.year)
+    dateStr = str(dateToday.month)+ "/" + str(dateToday.day) + "/" + str(dateToday.year) + " " + get_week_name(dateToday.weekday())
     mail_html_page += "<p> Date: <b>" + dateStr + "</b></p>"
     
     mail_html_page += "<h3> Some snapshots </h3>"
