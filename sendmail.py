@@ -46,6 +46,8 @@ if __name__ == "__main__":
             recipent = {"name" : recp_name, "email" : recp_email}
         recipent_fp.close()
     
+    # start to compile mail
+    msg = MIMEMultipart()
     # open JSON file to get the CC's list and embed CC list to mail header
     with open('config/cc_list.json', 'r', encoding='utf-8') as cc_list_fp:
         cc_list = json.load(cc_list_fp)
@@ -53,18 +55,16 @@ if __name__ == "__main__":
             cc_list_string = ""
             # converting to MIME usable format
             for data in cc_list:
-                cc_list_string += data["name"] + " <" + data["email"] + ", "
-            msg['CC'] = cc_list_string
+                cc_list_string += data["name"] + " <" + data["email"] + ">, "
         print(cc_list)
         chk_cc = input("Is the given cc list information correct? ")
         if chk_cc == 'y':
-            pass
+            msg['CC'] = cc_list_string
         else:
             cc_list == []
         cc_list_fp.close()
 
     # Initializing mail headers
-    msg = MIMEMultipart()
     msg['From'] = sender["name"] + " <" + sender["email"] + ">"
     msg['To'] = recipent["name"] + " <" + recipent["email"] + ">"
     # msg['CC'] = cc_list_string
@@ -128,3 +128,4 @@ if __name__ == "__main__":
     except Exception:
         print('Mail failed to transfer')
         raise
+    return_string = input("Press any key to continue")
