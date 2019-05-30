@@ -211,11 +211,8 @@ if __name__ == "__main__":
                           <tr>
                             <td style="text-align: left; padding-left: 10px;">
                               <h3>Useful Links</h3>
-                              <ul>
-                                <li><a href="https://yuiltripathee.github.io/">Website</a></li>
-                                <li><a href="https://github.com/YuilTripathee">GitHub</a></li>
-                                <li><a href="https://www.linkedin.com/in/yuiltr/">LinkedIn</a></li>
-                              </ul>
+                              <p align="center">&nbsp; <a href="https://yuiltripathee.github.io/">Website</a>&nbsp; <a href="https://github.com/YuilTripathee">GitHub</a></li><a href="https://www.linkedin.com/in/yuiltr/">LinkedIn</a>
+                              </p>
                             </td>
                           </tr>
                         </table>
