@@ -106,17 +106,21 @@ if __name__ == "__main__":
     for imge_ci in range(0, len(files)):
         image_ci = str(imge_ci + 1)
         img_fp = open(files[imge_ci], 'rb')
-        msgImage = MIMEImage(img_fp.read())
+        img_filename = os.path.basename(files[imge_ci])
+        msgImage = MIMEImage(img_fp.read(), img_filename)
         img_fp.close()
         image_value = "<image" + image_ci + ">"
         msgImage.add_header('Content-ID', image_value)
-        msg.attach(msgImage)
-
+        msgImage.add_header('Content-Disposition', 'inline', filename=img_filename)
+        msg.attach(msgImage) 
+    
     # Firing up the mail engine
     try:
         with smtplib.SMTP('smtp.gmail.com:587') as mail_sys:
             mail_sys.ehlo()
+            print("Established SMTP connection with the mail server!")
             mail_sys.starttls()
+            print("TLS connection established!")
             print("Yuil, you have to provide your e-mail password in order to login to SMTP.")
             password = stdiomask.getpass()
             mail_sys.login(sender["email"],password)
