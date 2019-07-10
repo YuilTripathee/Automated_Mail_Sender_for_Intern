@@ -49,6 +49,8 @@ def send_mail(sender, recipent, msg):
 
 if __name__ == "__main__":
 
+    print("\n[sendmail.py]\n")
+
     # open JSON file to get the sender's data
     with open('config/sender.json', 'r', encoding='utf-8') as sender_fp:
         sender = json.load(sender_fp)

@@ -2,11 +2,11 @@ import os
 
 
 def chk_send_mail():
-    ans = input("Would you like to send status update e-mail: [y/N]\n")
+    ans = input("Would you like to send status update e-mail: [y/n]\n")
     if ans == 'y':
         send_mail()
         msg_farewell()
-    elif ans == 'N':
+    elif ans == 'n':
         msg_farewell()
         pass
     else:
@@ -24,4 +24,5 @@ def send_mail():
 
 
 if __name__ == "__main__":
+    print("\n[mail_confirm.py]\n")
     chk_send_mail()

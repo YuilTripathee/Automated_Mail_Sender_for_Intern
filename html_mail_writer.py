@@ -27,6 +27,8 @@ def get_week_name(week_number):
 
 # mail function
 if __name__ == "__main__":
+
+    print("\n[html_mail_writer.py]\n")
     # empty mail page container
     mail_html_page = """"""
     html_page_title = sys.argv[1]
