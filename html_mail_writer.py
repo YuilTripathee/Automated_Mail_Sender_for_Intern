@@ -27,10 +27,10 @@ def get_week_name(week_number):
     return week_name
 
 
-# mail function
+# main function
 if __name__ == "__main__":
 
-    print("\n[html_mail_writer.py]\n")
+    print("\n" + __file__ + "\n")
     # empty mail page container
     mail_html_page = """"""
     html_page_title = sys.argv[1]
@@ -182,7 +182,7 @@ if __name__ == "__main__":
                           <tr>
                             <td style="text-align: left; padding-right: 10px;">
                               <h3>About</h3>
-                              <p>The email is hereby sent to you for the purpose of status update of the activities under the operation of internship.</p><p><b>Thanks for watching</b></p>
+                              <p>The email is hereby sent to you for the purpose of status update of the activities.</p><p><b>Thanks for watching</b></p>
                             </td>
                           </tr>
                         </table>
