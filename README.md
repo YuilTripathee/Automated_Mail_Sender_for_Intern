@@ -4,9 +4,10 @@
 
 ### Usage algorithm
 
+This is for extended version since minified version is much intuitive to use.
 Here's how to use this program:
 
-1. Run the program 
+1. Run the program
    > `python3 mail_confirm.py`
 2. Choose if you are ready to send the email. Options [y/N]
 3. Check if sender information is correct. Edit by entering `N` or enter `y` if the information is correct.
@@ -138,3 +139,61 @@ CC's:
 ## Decoding file and their roles
 
 1. `mail_confirm.py` Select if the mail is to be sent and which mode (either standard or extended) if to be sent.
+
+## File contents documentation
+
+```bash
+.
+├── attachments # attachments to be sent via the mail
+│   └── document.pdf # sample attachment for testing purposes
+├── config # configuration files for extended mailer bot version
+│   ├── cc_list_backup_schema.json # for file structure backup
+│   ├── cc_list.json # cc information
+│   ├── recipent.json # recipent information
+│   └── sender.json # sender information
+├── html_mail_writer.py # mail page writer script for extended mailer bot version
+├── LICENSE # MIT licensed project
+├── mail
+│   ├── mail.html # template sample for extended mailer bot version
+│   └── min.html # template sample for minified mailer bot version
+├── mail_confirm.py # for selection of mailer bot variant to be executed
+├── MailerAuto -> /home/ronnie/Programs/MailerAuto/start.sh # pwd
+├── mail_util.py # scripts for utilities in mailer bot
+├── message # mail content templates
+│   ├── templates.json # message templates for extended mailer bot version
+│   └── title.json # title templates for extended mailer bot version
+├── min # minified version of bot (optimized for convenience)
+│   ├── data
+│   │   └── main.json # collection of templates of mailing information
+│   ├── html_mail_writer.py # minified version of mail page writer engine
+│   └── sendmail.py # minified version of mail sender
+├── mstart.sh # dummy project starter (for testing - untracked)
+├── notes.md # technical documentation (to document R & D findings)
+├── README.md # project documentation
+├── res # resources folder for documentation (sampling of the email)
+│   ├── part_1.png
+│   ├── part_2.png
+│   └── part_3.png
+├── sendmail.py
+├── snapshots # folder where snapshots are recorded
+│   ├── API with Golang.png # some sample snapshots
+│   └── flutter env setup sucessfull.png
+└── start.sh # script that runs the mailer bot
+```
+
+## Program flow
+
+```txt
+
+start.sh
+|
+v
+mail_confirm.py
+| |
+| |-----> min/sendmail.py <--> min/html_mail_writer.py
+|-------> sendmail.py <--> html_mail_writer.py
+
+Hence, the bot is able to send mail via SMTP protocol in MIME format.
+
+mail_util.py # for mail utilities
+```
