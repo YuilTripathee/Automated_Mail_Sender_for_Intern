@@ -22,6 +22,7 @@ Here's how to use this program:
 10. As you log in, the mail will be sent to the recipent with the cc in presence of validity of configuration you've provided earlier.
 
 ### Demo
+
 Demo in bash (MATE desktop environment):
 
 ```c
@@ -131,5 +132,9 @@ CC's:
 
 1. File formats: **jpg, png, gif**
 2. File name: **rename on the basis of activity**
-3. File location: 
+3. File location:
    >`snapshots\`
+
+## Decoding file and their roles
+
+1. `mail_confirm.py` Select if the mail is to be sent and which mode (either standard or extended) if to be sent.

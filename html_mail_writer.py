@@ -1,3 +1,5 @@
+# extended version of html_mail_writer.py, support script for mail sender bot
+
 import os
 import time
 import json
@@ -144,11 +146,12 @@ if __name__ == "__main__":
         time.strftime("%I:%M %p %z") + "</b>"
     mail_html_page += "<p> Date: " + dateStr + "</p>"
 
-    mail_html_page += "<h3> Some snapshots </h3>"
     # container for embedding images
     files = []
     for (path, dirnames, filenames) in os.walk('snapshots'):
         files.extend(os.path.join(path, name) for name in filenames)
+    if len(files) != 0:
+        mail_html_page += "<h3> Some snapshots </h3>"
     print("\nEmbedding image reference...")
     for img_ci in range(0, len(files)):
         image_ci = img_ci + 1

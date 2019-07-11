@@ -1,3 +1,5 @@
+# extended version of mail sender bot
+
 import os
 import json
 from datetime import date
