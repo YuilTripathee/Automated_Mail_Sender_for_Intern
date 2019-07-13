@@ -1,3 +1,5 @@
+# extended version of mail sender bot
+
 import os
 import json
 from datetime import date
@@ -20,36 +22,12 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.application import MIMEApplication
 
-# method for sending mail in MIME format
-def send_mail(sender, recipent, msg):
-    try:
-        with smtplib.SMTP('smtp.gmail.com:587') as mail_sys:
-            mail_sys.ehlo()
-            print("Established SMTP connection with the mail server!")
-            mail_sys.starttls()
-            print("TLS connection established!")
-            print(
-                "Yuil, you have to provide your e-mail password in order to login to SMTP.")
-            password = stdiomask.getpass()
-            mail_sys.login(sender, password)
-            print("Logged in sucessfully!")
-            print("Sending mail...")
-            mail_sys.sendmail(sender,
-                              recipent, msg.as_string())
-            print('Mail sent sucessfully')
-            pass
-    except smtplib.SMTPAuthenticationError:
-        print("\nUsername or password may be invalid.")
-        send_mail(sender, recipent, msg)
-    except socket.gaierror:
-        print("\nConnectivity Problem.")
-    except Exception:
-        print('Mail failed to transfer')
-        raise
+# importing custom defined libraries
+import mail_util
 
 if __name__ == "__main__":
 
-    print("\n[sendmail.py]\n")
+    mail_util.hello(__file__)
 
     # open JSON file to get the sender's data
     with open('config/sender.json', 'r', encoding='utf-8') as sender_fp:
@@ -83,8 +61,8 @@ if __name__ == "__main__":
     # open JSON file to get the CC's list and embed CC list to mail header
     with open('config/cc_list.json', 'r', encoding='utf-8') as cc_list_fp:
         cc_list = json.load(cc_list_fp)
+        cc_list_string = ""
         if cc_list != []:
-            cc_list_string = ""
             # converting to MIME usable format
             for data in cc_list:
                 cc_list_string += data["name"] + " <" + data["email"] + ">, "
@@ -154,18 +132,18 @@ if __name__ == "__main__":
 
     # Embedding images into the mail
     # Getting the list of paths for the image in snapshots folder
-    files = []
+    snapshots = []
     print("\nInserting images:")
     print("=================")
     # folders = []
     # folders.extend(os.path.join(path, name) for name in dirnames)
     for (path, dirnames, filenames) in os.walk('snapshots'):
-        files.extend(os.path.join(path, name) for name in filenames)
+        snapshots.extend(os.path.join(path, name) for name in filenames)
     # writing each image file into mail page
-    for imge_ci in range(0, len(files)):
+    for imge_ci in range(0, len(snapshots)):
         image_ci = str(imge_ci + 1) # special numbering for content id in HTML page image cid
-        img_fp = open(files[imge_ci], 'rb') # image file binary for network stream
-        img_filename = os.path.basename(files[imge_ci]) # file name of the particular image file
+        img_fp = open(snapshots[imge_ci], 'rb') # image file binary for network stream
+        img_filename = os.path.basename(snapshots[imge_ci]) # file name of the particular image file
         msgImage = MIMEImage(img_fp.read(), img_filename) # encoding image into MIME format
         img_fp.close()
         image_value = "<image" + image_ci + ">"
@@ -173,7 +151,7 @@ if __name__ == "__main__":
         msgImage.add_header('Content-Disposition', # MIME header for Content-Disposition
                             'inline', filename=img_filename)
         msg.attach(msgImage) # attaching image to the main MIME email object
-        print("Image inserted: " + files[imge_ci])
+        print("Image inserted: " + snapshots[imge_ci])
 
     # Inserting mail attachments
     attaches = []
@@ -198,6 +176,9 @@ if __name__ == "__main__":
         print("File attached: " + attach_file)
 
     # Firing up the mail engine
-    print("\nSending mail...")
-    send_mail(sender["email"], recipent["email"], msg)
-    return_string = input("Press any key to continue")
+    try:
+        mail_util.send_mail(sender["email"], recipent["email"], msg)
+        update_stats(str(datetime.now()), msg)
+        mail_util.clean_files(snapshots=snapshots, attachments=attaches)
+    finally:
+        return_string = input("Press any key to continue")

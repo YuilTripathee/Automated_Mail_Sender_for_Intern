@@ -3,3 +3,6 @@ snapshots/*
 attachments/*
 .vscode/*
 */__pycache__/*
+archive/*
+*/stats.json
+stats.json

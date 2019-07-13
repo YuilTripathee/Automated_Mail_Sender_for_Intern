@@ -1,22 +1,21 @@
-# extended version of html_mail_writer.py, support script for mail sender bot
+# minified version of html_mail_writer.py, support script for mail sender bot
 
 import os
 import time
-import json
-import sys
 from datetime import date
 
-# custom defined libraries imported
-import mail_util
+import sys
+from os.path import dirname, join, abspath
+# for importing file for parent directory (up A level directory)
+sys.path.insert(0, abspath(join(dirname(__file__), '..')))
+import mail_util # mail utility scripts
 
-# main function
-if __name__ == "__main__":
-
-    mail_util.hello(__file__)
+# mail writer function
+def write_mail(message):
+    mail_util.hello(__file__,bot_type='min')  # notifies initiation of mail writer script (bot engine)
 
     # empty mail page container
     mail_html_page = """"""
-    html_page_title = sys.argv[1]
     # initial part of mail page
     html_page_part1 = """
         <!DOCTYPE html>
@@ -26,9 +25,7 @@ if __name__ == "__main__":
             <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
             <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
             <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
-            <title>"""
-
-    html_page_part2 = """</title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+            <title>""" + message["title"] + """</title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
         </head>
 
@@ -46,61 +43,16 @@ if __name__ == "__main__":
                         <tr>
                             <td>
                                 <div style="padding: 0 30px;">
-                                <h2 style="text-align: center;">Status update</h2>
+                                <h2 style="text-align: center;">""" + message['title'] + """</h2>
                                 <p>Hi,</p>
                                 <p>
     """
 
     # Adding initial part into the mail page
-    mail_html_page += html_page_part1
-    mail_html_page += html_page_title
-    mail_html_page += html_page_part2
+    mail_html_page += html_page_part1  # initial section
 
     # Adding message into the mail page
-    temp_usage_prompt = input("Would you consider using a template? [y/n]\n")
-    # If you choose to use template or even write a new template
-    if temp_usage_prompt == 'y':
-        with open('message/templates.json', 'r', encoding='utf-8') as tmp_fp:
-            template_list = json.load(tmp_fp)
-            tmp_fp.close()
-
-        print("\nAvailable templates:")
-        print("====================")
-
-        for c_i in range(0, len(template_list)):
-            print(str(c_i) + ": " + template_list[c_i]["label"])
-
-        ans_prompt1 = input(
-            "\nWould you choose to use template or write on your own? [y/n]\n")
-        # if you consider using the pre-defined template
-        if ans_prompt1 == "y":
-            temp_id = int(input("\nEnter the template id: "))
-            temp_text = template_list[temp_id]["text"]
-        # If you consider writing custom message and saving it to a template
-        else:
-            print("\nFeel comfortable writing text in HTML format:")
-            print("===========================================\n")
-            contents = []
-            while True:
-                line = input()
-                if line == '':
-                    break
-                contents.append(line)
-            temp_text = '<br>'.join(contents)
-            new_temp_text = temp_text
-            new_temp_label = input("\nPlease provide a label: ")
-
-            # If you didn't provided any templates
-            if new_temp_label != '' or new_temp_text != '':
-                with open('message/templates.json', 'w', encoding='utf-8') as msg_tmp_fp:
-                    template_list.append(
-                        {"label": new_temp_label, "text": new_temp_text})
-                    json.dump(template_list, msg_tmp_fp, indent=4)
-                    msg_tmp_fp.close()
-        mail_html_page += temp_text
-    # If you consider not using templates
-    else:
-        pass
+    mail_html_page += message["message"]
 
     # If you consider adding up extra text after a template (or either without using it.)
     add_para_prompt = input(
@@ -121,7 +73,6 @@ if __name__ == "__main__":
     else:
         pass
 
-    print("Contents written sucessfully!")
     # For date of update
     dateToday = date.today()
     dateStr = "<b>" + str(dateToday.month) + "/" + str(dateToday.day) + "/" + str(dateToday.year) + " " + \
@@ -134,9 +85,9 @@ if __name__ == "__main__":
     files = []
     for (path, dirnames, filenames) in os.walk('snapshots'):
         files.extend(os.path.join(path, name) for name in filenames)
+    print("\nEmbedding image reference...")
     if len(files) != 0:
         mail_html_page += "<h3> Some snapshots </h3>"
-    print("\nEmbedding image reference...")
     for img_ci in range(0, len(files)):
         image_ci = img_ci + 1
         mail_html_page += '<p><img src="cid:image' + \
@@ -166,7 +117,7 @@ if __name__ == "__main__":
                           <tr>
                             <td style="text-align: left; padding-right: 10px;">
                               <h3>About</h3>
-                              <p>The email is hereby sent to you for the purpose of status update of the activities.</p><p><b>Thanks for watching</b></p>
+                              <p>""" + message["about"] + """</p><p><b>Thanks for watching</b></p>
                             </td>
                           </tr>
                         </table>
@@ -234,8 +185,11 @@ if __name__ == "__main__":
     """
     mail_html_page += html_page_part2
 
-    with open('mail/mail.html', 'w', encoding="utf-8") as mail_page_fp:
-        mail_page_fp.write(mail_html_page)
-        mail_page_fp.close()
+    # writing entire template into a file
+    # will keep this feature for testing reasons only
+    # with open('mail/min.html', 'w', encoding="utf-8") as mail_page_fp:
+    #     mail_page_fp.write(mail_html_page)
+    #     mail_page_fp.close()
 
     print("\nMail page written sucessfully!")
+    return mail_html_page

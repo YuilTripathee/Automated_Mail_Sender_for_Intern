@@ -1,0 +1,73 @@
+[
+    {
+        "ref" : "Testing",
+        "sender" : {
+            "name" : "Yuil Tripathee",
+            "email" : "yuiltripathee79@gmail.com"
+        },
+        "recipent" : {
+            "name" : "Yuil Tripathee",
+            "email" : "yuiltripathee79@gmail.com"
+        },
+        "cc" : [
+            
+        ],
+        "message" : {
+            "title" : "Testing Email",
+            "message" : "lorem ipsum dolor set amet",
+            "about" : "Just a testing email"
+        }
+    },
+    {
+        "ref" : "Intern status update email",
+        "sender" : {
+            "name" : "Yuil Tripathee",
+            "email" : "yuiltripathee79@gmail.com"
+        },
+        "recipent" : {
+            "name" : "Deepak Poudel",
+            "email" : "rpoudel42@gmail.com"
+        },
+        "cc" : [
+            {
+                "name" : "Ram Chandra Poudel",
+                "email" : "rpoudel42@gmail.com"
+            },
+            {
+                "name" : "Deepak Poudel",
+                "email" : "deepakpoudel073@gmail.com"
+            },
+            {
+                "name" : "Bishal Giri",
+                "email" : "giribsaal@gmail.com"
+            }
+        ],
+        "message" : {
+            "title" : "Intern: Status Update",
+            "message" : "I intend to report my activities under internship via this mail. Here you are with the insight of my internship activities as mentioned below.",
+            "about" : "The email is hereby sent to you for the purpose of status update of the activities under the operation of internship."
+        }
+    },
+    {
+        "ref" : "Remote status update email",
+        "sender" : {
+            "name" : "Yuil Tripathee",
+            "email" : "yuiltripathee79@gmail.com"
+        },
+        "recipent" : {
+            "name" : "Deepak Poudel",
+            "email" : "rpoudel42@gmail.com"
+        },
+        "cc" : [
+            {
+                "name" : "Ram Chandra Poudel",
+                "email" : "rpoudel42@gmail.com"
+            }
+        ],
+        "message" : {
+            "title" : "Remote: Status Update",
+            "message" : "I'd like to update my status being a remote developer using this email. This mail is sent by a bot especially for the purpose of notifying for noticies, updates and overview of my latest activities.",
+            "about" : "The email is hereby sent to you for the purpose of status update of the activities working remotely."
+        }
+    }
+]
