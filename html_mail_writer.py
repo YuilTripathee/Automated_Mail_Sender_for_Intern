@@ -46,7 +46,7 @@ if __name__ == "__main__":
                         <tr>
                             <td>
                                 <div style="padding: 0 30px;">
-                                <h2 style="text-align: center;">Intern: status update</h2>
+                                <h2 style="text-align: center;">Status update</h2>
                                 <p>Hi,</p>
                                 <p>
     """
