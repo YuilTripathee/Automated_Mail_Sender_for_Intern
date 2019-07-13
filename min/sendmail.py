@@ -3,7 +3,7 @@
 import os
 import sys
 import json
-from datetime import date
+from datetime import date, datetime
 import socket
 
 # Import smtplib for the actual sending function
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     # Firing up the mail engine
     try:
         mail_util.send_mail(dataset['sender']['email'], dataset['recipent']['email'], msg, bot_type='min')
-        update_stats(str(datetime.now()), msg, bot_type='min')
+        mail_util.update_stats(str(datetime.now()), msg, bot_type='min')
         mail_util.clean_files(snapshots=snapshots, attachments=attaches)
     finally:
         return_string = input("Press any key to continue")

@@ -2,7 +2,7 @@
 
 import os
 import json
-from datetime import date
+from datetime import date, datetime
 import socket
 
 # custom library (downloaded from pip) to mask password inputs
@@ -178,7 +178,7 @@ if __name__ == "__main__":
     # Firing up the mail engine
     try:
         mail_util.send_mail(sender["email"], recipent["email"], msg)
-        update_stats(str(datetime.now()), msg)
+        mail_util.update_stats(str(datetime.now()), msg)
         mail_util.clean_files(snapshots=snapshots, attachments=attaches)
     finally:
         return_string = input("Press any key to continue")
