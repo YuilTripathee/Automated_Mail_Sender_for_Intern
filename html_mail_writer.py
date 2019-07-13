@@ -6,31 +6,14 @@ import json
 import sys
 from datetime import date
 
-# function to take week number to return week day (starting Monday as 0)
-def get_week_name(week_number):
-    if week_number == 0:
-        week_name = "Monday"
-    elif week_number == 1:
-        week_name = "Tuesday"
-    elif week_number == 2:
-        week_name = "Wednesday"
-    elif week_number == 3:
-        week_name = "Thursday"
-    elif week_number == 4:
-        week_name = "Friday"
-    elif week_number == 5:
-        week_name = "Saturday"
-    elif week_number == 6:
-        week_name = "Sunday"
-    else:
-        week_name = "Invalid weekday() input"
-    return week_name
-
+# custom defined libraries imported
+import mail_util
 
 # main function
 if __name__ == "__main__":
 
-    print("\n" + __file__ + "\n")
+    mail_util.hello(__file__)
+
     # empty mail page container
     mail_html_page = """"""
     html_page_title = sys.argv[1]
@@ -138,15 +121,16 @@ if __name__ == "__main__":
     else:
         pass
 
-    print("Template written sucessfully!")
+    print("Contents written sucessfully!")
     # For date of update
     dateToday = date.today()
     dateStr = "<b>" + str(dateToday.month) + "/" + str(dateToday.day) + "/" + str(dateToday.year) + " " + \
-        get_week_name(dateToday.weekday()) + "</b><br>Time: <b>" + \
+        mail_util.get_week_name(dateToday.weekday()) + "</b><br>Time: <b>" + \
         time.strftime("%I:%M %p %z") + "</b>"
     mail_html_page += "<p> Date: " + dateStr + "</p>"
 
     # container for embedding images
+    mail_util.hold_file_import() # for last file attachment confirmation
     files = []
     for (path, dirnames, filenames) in os.walk('snapshots'):
         files.extend(os.path.join(path, name) for name in filenames)

@@ -22,36 +22,12 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.application import MIMEApplication
 
-# method for sending mail in MIME format
-def send_mail(sender, recipent, msg):
-    try:
-        with smtplib.SMTP('smtp.gmail.com:587') as mail_sys:
-            mail_sys.ehlo()
-            print("Established SMTP connection with the mail server!")
-            mail_sys.starttls()
-            print("TLS connection established!")
-            print(
-                "Yuil, you have to provide your e-mail password in order to login to SMTP.")
-            password = stdiomask.getpass()
-            mail_sys.login(sender, password)
-            print("Logged in sucessfully!")
-            print("Sending mail...")
-            mail_sys.sendmail(sender,
-                              recipent, msg.as_string())
-            print('Mail sent sucessfully')
-            pass
-    except smtplib.SMTPAuthenticationError:
-        print("\nUsername or password may be invalid.")
-        send_mail(sender, recipent, msg)
-    except socket.gaierror:
-        print("\nConnectivity Problem.")
-    except Exception:
-        print('Mail failed to transfer')
-        raise
+# importing custom defined libraries
+import mail_util
 
 if __name__ == "__main__":
 
-    print("\n" + __file__ + "\n")
+    mail_util.hello(__file__)
 
     # open JSON file to get the sender's data
     with open('config/sender.json', 'r', encoding='utf-8') as sender_fp:
@@ -201,5 +177,5 @@ if __name__ == "__main__":
 
     # Firing up the mail engine
     print("\nSending mail...")
-    send_mail(sender["email"], recipent["email"], msg)
+    mail_util.send_mail(sender["email"], recipent["email"], msg)
     return_string = input("Press any key to continue")

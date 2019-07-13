@@ -4,31 +4,15 @@ import os
 import time
 from datetime import date
 
-# function to take week number to return week day (starting Monday as 0)
+import sys
+from os.path import dirname, join, abspath
+# for importing file for parent directory (up A level directory)
+sys.path.insert(0, abspath(join(dirname(__file__), '..')))
+import mail_util # mail utility scripts
 
-
-def get_week_name(week_number):
-    if week_number == 0:
-        week_name = "Monday"
-    elif week_number == 1:
-        week_name = "Tuesday"
-    elif week_number == 2:
-        week_name = "Wednesday"
-    elif week_number == 3:
-        week_name = "Thursday"
-    elif week_number == 4:
-        week_name = "Friday"
-    elif week_number == 5:
-        week_name = "Saturday"
-    elif week_number == 6:
-        week_name = "Sunday"
-    else:
-        week_name = "Invalid weekday() input"
-    return week_name
-
-
+# mail writer function
 def write_mail(message):
-    hello()  # notifies initiation of mail writer script (bot engine)
+    mail_util.hello(__file__,bot_type='min')  # notifies initiation of mail writer script (bot engine)
 
     # empty mail page container
     mail_html_page = """"""
@@ -92,11 +76,12 @@ def write_mail(message):
     # For date of update
     dateToday = date.today()
     dateStr = "<b>" + str(dateToday.month) + "/" + str(dateToday.day) + "/" + str(dateToday.year) + " " + \
-        get_week_name(dateToday.weekday()) + "</b><br>Time: <b>" + \
+        mail_util.get_week_name(dateToday.weekday()) + "</b><br>Time: <b>" + \
         time.strftime("%I:%M %p %z") + "</b>"
     mail_html_page += "<p> Date: " + dateStr + "</p>"
 
     # container for embedding images
+    mail_util.hold_file_import() # for last file attachment confirmation
     files = []
     for (path, dirnames, filenames) in os.walk('snapshots'):
         files.extend(os.path.join(path, name) for name in filenames)
@@ -208,7 +193,3 @@ def write_mail(message):
 
     print("\nMail page written sucessfully!")
     return mail_html_page
-
-
-def hello(): # identifier for which python script is being executed
-    print('\nmin: ' + __file__ + '\n')

@@ -29,36 +29,9 @@ from os.path import dirname, join, abspath
 sys.path.insert(0, abspath(join(dirname(__file__), '..'))) # for importing file for parent directory (up A level directory)
 import mail_util # mail utility scripts
 
-# method for sending mail in MIME format
-def send_mail(sender, recipent, msg):
-    try:
-        with smtplib.SMTP('smtp.gmail.com:587') as mail_sys:
-            mail_sys.ehlo()
-            print("Established SMTP connection with the mail server!")
-            mail_sys.starttls()
-            print("TLS connection established!")
-            print(
-                "Yuil, you have to provide your e-mail password in order to login to SMTP.")
-            password = stdiomask.getpass()
-            mail_sys.login(sender, password)
-            print("Logged in sucessfully!")
-            print("Sending mail...")
-            mail_sys.sendmail(sender,
-                              recipent, msg.as_string())
-            print('Mail sent sucessfully')
-            pass
-    except smtplib.SMTPAuthenticationError:
-        print("\nUsername or password may be invalid.")
-        send_mail(sender, recipent, msg)
-    except socket.gaierror:
-        print("\nConnectivity Problem.")
-    except Exception:
-        print('Mail failed to transfer')
-        raise
-
 if __name__ == "__main__":
     
-    print("\n" + __file__ + "\n")
+    mail_util.hello(__file__, bot_type='min')
 
     # open the template file
     with open('min/data/main.json', 'r', encoding='utf-8') as data_fp: # top level invoking requires locating file from the shell's localtion (i.e. project directory)
@@ -72,8 +45,13 @@ if __name__ == "__main__":
         print(str(c_i) + ": " + data[c_i]["ref"])
     
     # getting and validating data reference from JSON array
-    data_id = int(input("\nEnter the data 'id' for the required format: "))
     try:
+        data_id = int(input("\nEnter the data 'id' for the required format: "))
+        dataset = data[data_id]
+        print(dataset["ref"])
+        print("Data id: " + str(data_id) + " is available.")
+    except ValueError: # still one chance for correction
+        data_id = int(input("\nEnter the data 'id' for the required format: "))
         dataset = data[data_id]
         print(dataset["ref"])
         print("Data id: " + str(data_id) + " is available.")
@@ -166,7 +144,7 @@ if __name__ == "__main__":
     
     # Firing up the mail engine
     print("\nSending mail...")
-    send_mail(dataset["sender"]["email"], dataset["recipent"]["email"], msg)
+    mail_util.send_mail(dataset['sender']['email'], dataset['recipent']['email'], msg)
     return_string = input("Press any key to continue")
 
     
