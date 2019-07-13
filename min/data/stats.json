@@ -1,0 +1,10 @@
+{
+    "count" : 0,
+    "variant" : "minified",
+    "log" : [
+        {
+            "timestamp" : "time",
+            "title" : "subject of the mail"
+        }
+    ]
+}
