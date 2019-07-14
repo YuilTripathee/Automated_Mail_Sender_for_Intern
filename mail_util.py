@@ -1,17 +1,23 @@
 # Utilities scripts for mailer bot
 
-import time, socket
-import os, shutil
+import time
+import socket
+import os
+import shutil
 import json
 import smtplib
 from datetime import datetime
+from pathlib import Path
 
 # custom library (downloaded from pip) to mask password inputs
 import stdiomask
 
 # Common components for all scripts
 # identifier for which python script is being executed
-def hello(file_name, bot_type='ext'): # takes filename and bot_type and prints which script is being executed
+
+
+# takes filename and bot_type and prints which script is being executed
+def hello(file_name, bot_type='ext'):
     if bot_type == 'min':
         print('\n[min: ' + file_name + ']\n')
     elif bot_type == 'ext':
@@ -20,12 +26,16 @@ def hello(file_name, bot_type='ext'): # takes filename and bot_type and prints w
         print("Invalid parameter passed to the method hello() in mail_util.py")
 
 # Common components for html mail writer script
-def hold_file_import(): # holds files import for confirmation before file's going to be attached
+
+
+def hold_file_import():  # holds files import for confirmation before file's going to be attached
     print("\nWarning!")
     print("Please check if files to be imported are set correctly. These file include attachments and snapshots.")
     return input("If confirmed, press any key to continue...")
 
-def get_week_name(week_number): # function to take week number to return week day (starting Monday as 0)
+
+# function to take week number to return week day (starting Monday as 0)
+def get_week_name(week_number):
     if week_number == 0:
         week_name = "Monday"
     elif week_number == 1:
@@ -45,7 +55,9 @@ def get_week_name(week_number): # function to take week number to return week da
     return week_name
 
 # Common components for mail sender script
-def send_mail(sender, recipent, msg, bot_type='ext'): # method for sending mail in MIME format
+
+
+def send_mail(sender, recipent, msg, bot_type='ext'):  # method for sending mail in MIME format
     try:
         with smtplib.SMTP('smtp.gmail.com:587') as mail_sys:
             mail_sys.ehlo()
@@ -59,7 +71,7 @@ def send_mail(sender, recipent, msg, bot_type='ext'): # method for sending mail 
             print("Logged in sucessfully!")
             print("Sending mail...")
             mail_sys.sendmail(sender,
-                              recipent, msg.as_string())          
+                              recipent, msg.as_string())
     except smtplib.SMTPAuthenticationError:
         print("\nUsername or password may be invalid.")
         send_mail(sender, recipent, msg)
@@ -70,7 +82,6 @@ def send_mail(sender, recipent, msg, bot_type='ext'): # method for sending mail 
         raise
     finally:
         print('Mail sent sucessfully')
-    
 
 
 # updates stats of mail sent using the bot for analytics purposes
@@ -93,9 +104,9 @@ def update_stats(mail_time, msg, bot_type='ext'):
         stats_data["log"].append({
             "timestamp": mail_time,
             "title": msg["Subject"],
-            "sender" : msg["From"],
-            "recipent" : msg["To"],
-            "cc" : msg["CC"]
+            "sender": msg["From"],
+            "recipent": msg["To"],
+            "cc": msg["CC"]
         })
         # write into file with new stats
         with open(stats_file_addr, 'w', encoding='utf-8') as fp:
@@ -106,18 +117,23 @@ def update_stats(mail_time, msg, bot_type='ext'):
         print("Stats updated.")
         fp.close()
 
-def clean_files(snapshots=None, attachments=None): # disposes files into other directory and clean the staging area for snapshots and attachments
+
+# disposes files into other directory and clean the staging area for snapshots and attachments
+def clean_files(snapshots=None, attachments=None):
     try:
         if snapshots != None:
             move_file('archive/snapshots', snapshots)
         if attachments != None:
             move_file('archive/attachments', attachments)
-    finally:    
+    finally:
         print("Files cleaned.")
 
 # add-on for file cleaner (to move file)
+
+
 def move_file(target_directory, files):
-    target_folder = os.path.join(target_directory, str(datetime.now().strftime("%Y-%m-%d")))
+    target_folder = os.path.join(target_directory, str(
+        datetime.now().strftime("%Y-%m-%d")))
     # create a folder if not exists (snapshots or attachments)
     if not os.path.exists(target_folder):
         os.makedirs(target_folder)
@@ -127,3 +143,49 @@ def move_file(target_directory, files):
         shutil.move(src, destination)
 
     # Note: Use cleaner apart from send_mail()
+
+# extension for html_mail_writer.py to render highlights contents based on snapshot filename
+
+
+def render_img_highlights(files):
+    highlights = """"""
+    highlights_part1 = """
+    <h4> Highlights </h4>
+    <ul>
+    """
+    highlights += highlights_part1
+    for file in files:
+        filename = Path(file).stem # gets filename
+        highlights_content = """
+        <li>%s</li>
+        """ % filename # builds list
+        highlights += highlights_content
+    highlights_part2 = """
+    </ul>
+    """
+    highlights += highlights_part2
+    return highlights # return whole string
+
+
+'''
+1. Auto content generation (based on snapshot)
+
+Algorithm:
+1. Get the snapshot index earlier (before embedding snapshot)
+2. Generate rendering from template.
+    a. For each file: slice out the filename.
+    b. Generate the list
+3. Return multi line template.
+
+Task:
+1. Add utility function
+2. Modify mailer bot to adapt this feature. [load files by initials]
+
+In mail_util.py:
+get_snap_highlights(list_type, list) => multi line template
+
+list_type: snapshot, file attachment [still attachment has no meaning]
+list: list of files (array of file location)
+
+Future version: Image Recognition
+'''

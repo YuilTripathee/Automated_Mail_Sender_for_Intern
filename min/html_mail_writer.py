@@ -87,6 +87,8 @@ def write_mail(message):
         files.extend(os.path.join(path, name) for name in filenames)
     print("\nEmbedding image reference...")
     if len(files) != 0:
+        mail_html_page += mail_util.render_img_highlights(files)
+        print("Highlights rendered sucessfully.")
         mail_html_page += "<h3> Some snapshots </h3>"
     for img_ci in range(0, len(files)):
         image_ci = img_ci + 1

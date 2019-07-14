@@ -135,6 +135,8 @@ if __name__ == "__main__":
     for (path, dirnames, filenames) in os.walk('snapshots'):
         files.extend(os.path.join(path, name) for name in filenames)
     if len(files) != 0:
+        mail_html_page += mail_util.render_img_highlights(files)
+        print("Highlights rendered sucessfully.")
         mail_html_page += "<h3> Some snapshots </h3>"
     print("\nEmbedding image reference...")
     for img_ci in range(0, len(files)):
