@@ -6,7 +6,7 @@ import os
 import shutil
 import json
 import smtplib
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 # custom library (downloaded from pip) to mask password inputs
@@ -85,7 +85,7 @@ def send_mail(sender, recipent, msg, bot_type='ext'):  # method for sending mail
 
 
 # updates stats of mail sent using the bot for analytics purposes
-def update_stats(mail_time, msg, bot_type='ext'):
+def update_stats(mail_time, msg, bot_type='ext', snapshots=[], attachments=[]):
     # selects stats file
     if bot_type == 'min':
         stats_file_addr = 'min/data/stats.json'
@@ -106,7 +106,9 @@ def update_stats(mail_time, msg, bot_type='ext'):
             "title": msg["Subject"],
             "sender": msg["From"],
             "recipent": msg["To"],
-            "cc": msg["CC"]
+            "cc": msg["CC"],
+            "attachments" : attachments,
+            "snapshots" : snapshots
         })
         # write into file with new stats
         with open(stats_file_addr, 'w', encoding='utf-8') as fp:
@@ -119,21 +121,20 @@ def update_stats(mail_time, msg, bot_type='ext'):
 
 
 # disposes files into other directory and clean the staging area for snapshots and attachments
-def clean_files(snapshots=None, attachments=None):
+def clean_files(snapshots=None, attachments=None, folderName=str(date.today())):
     try:
         if snapshots != None:
-            move_file('archive/snapshots', snapshots)
+            move_file('archive/snapshots', snapshots, folderName)
         if attachments != None:
-            move_file('archive/attachments', attachments)
+            move_file('archive/attachments', attachments, folderName)
     finally:
         print("Files cleaned.")
 
 # add-on for file cleaner (to move file)
 
 
-def move_file(target_directory, files):
-    target_folder = os.path.join(target_directory, str(
-        datetime.now().strftime("%Y-%m-%d")))
+def move_file(target_directory, files, folderName):
+    target_folder = os.path.join(target_directory, folderName)
     # create a folder if not exists (snapshots or attachments)
     if not os.path.exists(target_folder):
         os.makedirs(target_folder)

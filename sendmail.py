@@ -178,7 +178,7 @@ if __name__ == "__main__":
     # Firing up the mail engine
     try:
         mail_util.send_mail(sender["email"], recipent["email"], msg)
-        mail_util.update_stats(str(datetime.now()), msg)
-        mail_util.clean_files(snapshots=snapshots, attachments=attaches)
+        mail_util.update_stats(str(datetime.now()), msg, snapshots=snapshots, attachments=attaches)
+        mail_util.clean_files(snapshots=snapshots, attachments=attaches, folderName=str(dateToday))
     finally:
         return_string = input("Press any key to continue")
