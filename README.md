@@ -1,4 +1,14 @@
-# Auto Progress Update
+# Automated Mail Sender 📨
+
+[TOC]
+
+## About the project 📨
+
+This project was developed such that I could report to my advisors on regular basis, without missing out any days (kind of newsletter). The content can be updated on asynchronous basis.
+
+**Before**: Write mail every 4 PM to supervisors.
+
+**After**: I update content any time of the day as the task is done. Then, `cron` job sends mail at exact reporting hours.
 
 ## User manual
 
@@ -8,6 +18,7 @@ This is for extended version since minified version is much intuitive to use.
 Here's how to use this program:
 
 1. Run the program
+   
    > `python3 mail_confirm.py`
 2. Choose if you are ready to send the email. Options [y/N]
 3. Check if sender information is correct. Edit by entering `N` or enter `y` if the information is correct.
@@ -134,6 +145,7 @@ CC's:
 1. File formats: **jpg, png, gif**
 2. File name: **rename on the basis of activity**
 3. File location:
+   
    >`snapshots\`
 
 ## Decoding file and their roles
